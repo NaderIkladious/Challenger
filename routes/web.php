@@ -11,4 +11,5 @@
 |
 */
 
-Route::view('/{path?}', 'app');
+Route::view('/', 'app')->where('wildcard', '.+');;
+Route::view('/{wildcard}', 'app')->where('wildcard', '.+');;
