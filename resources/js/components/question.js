@@ -14,6 +14,17 @@ class Question extends React.Component {
                         <McqOptions options={JSON.parse(question.options)} question={question} />
                     </div>
                 )}
+
+                {question.type === 'text' && question.options && (
+                    <div>
+                        <div className="form-group">
+                            <textarea className="form-control" name={question.id} rows="3" placeholder="Your Answer" />
+                        </div>
+                        <button type="submit" className="btn btn-primary mb-2">
+                            Submit
+                        </button>
+                    </div>
+                )}
             </div>
         );
     }
