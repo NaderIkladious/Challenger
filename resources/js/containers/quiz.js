@@ -6,7 +6,8 @@ import { Question, QuestionsList } from '../components';
 
 class Quiz extends React.Component {
     state = {
-        quiz: {}
+        quiz: {},
+        answers: {}
     };
     componentDidMount() {
         const quizId = this.props.match.params.id;
@@ -14,6 +15,32 @@ class Quiz extends React.Component {
             this.setState({ quiz: data });
         });
     }
+    handleAnswer = e => {
+        const { name, value } = e.target;
+        this.setState({
+            answers: {
+                ...this.state.answers,
+                [name]: value
+            }
+        });
+    };
+    handleInput = e => {
+        const { name, value } = e.target;
+        this.setState({
+            answers: {
+                ...this.state.answers,
+                [`text-${name}`]: value
+            }
+        });
+    };
+    saveInput = input => {
+        this.setState({
+            answers: {
+                ...this.state.answers,
+                [input.replace('text-', '')]: this.state.answers[input]
+            }
+        });
+    };
     render() {
         const { quiz } = this.state;
         return (
@@ -29,7 +56,16 @@ class Quiz extends React.Component {
                         <Route
                             key={question.id}
                             path={`/quiz/${quiz.id}/questions/${question.id}`}
-                            render={() => <Question question={question} />}
+                            render={() => (
+                                <Question
+                                    question={question}
+                                    answer={this.state.answers[question.id] || ''}
+                                    answerDraft={this.state.answers[`text-${question.id}`] || ''}
+                                    handleChange={this.handleAnswer}
+                                    handleTextChange={this.handleInput}
+                                    saveDraftAnswer={this.saveInput}
+                                />
+                            )}
                         />
                     ))}
             </div>
