@@ -38,17 +38,13 @@ class Quiz extends React.Component {
      */
     handleAnswer = e => {
         const { name, value } = e.target;
-        this.setState(
-            {
-                answers: {
-                    ...this.state.answers,
-                    [name]: value
-                }
-            },
-            () => {
-                this.checkAnswer(name, value);
+        this.checkAnswer(name, value);
+        this.setState({
+            answers: {
+                ...this.state.answers,
+                [name]: value
             }
-        );
+        });
     };
 
     /**
