@@ -6,18 +6,18 @@ import { Header } from './components';
 import { Quiz } from './containers';
 
 class App extends React.Component {
-    render() {
-        return (
-            <div>
-                <Router>
-                    <Header />
-                    <Switch>
-                        <Route path="/quiz/:id" component={Quiz} />
-                    </Switch>
-                </Router>
-            </div>
-        );
-    }
+  render() {
+    return (
+      <div>
+        <Router>
+          <Header />
+          <Switch>
+            <Route path="/quiz/:id" component={Quiz} />
+          </Switch>
+        </Router>
+      </div>
+    );
+  }
 }
 
 ReactDOM.render(<App />, document.getElementById('app'));

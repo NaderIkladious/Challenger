@@ -15,15 +15,47 @@ class Quiz extends React.Component {
             this.setState({ quiz: data });
         });
     }
-    handleAnswer = e => {
-        const { name, value } = e.target;
-        this.setState({
-            answers: {
-                ...this.state.answers,
-                [name]: value
-            }
+
+    /**
+     * Check the score of a specific question
+     * @param String questionId The id of the question to check
+     * @param String answer The question answer
+     */
+    checkAnswer = (id, answer) => {
+        Axios.post(`/api/questions/validate`, { id, answer }).then(({ data }) => {
+            this.setState({
+                answers: {
+                    ...this.state.answers,
+                    [`result-${id}`]: parseFloat(data)
+                }
+            });
         });
     };
+    /**
+     * Save input from radio button to the state
+     * @param Object e Event object
+     * @returns Void
+     */
+    handleAnswer = e => {
+        const { name, value } = e.target;
+        this.setState(
+            {
+                answers: {
+                    ...this.state.answers,
+                    [name]: value
+                }
+            },
+            () => {
+                this.checkAnswer(name, value);
+            }
+        );
+    };
+
+    /**
+     * Save input from textarea to the state
+     * @param Object e Event object
+     * @returns Void
+     */
     handleInput = e => {
         const { name, value } = e.target;
         this.setState({
@@ -61,6 +93,7 @@ class Quiz extends React.Component {
                                     question={question}
                                     answer={this.state.answers[question.id] || ''}
                                     answerDraft={this.state.answers[`text-${question.id}`] || ''}
+                                    result={this.state.answers[`result-${question.id}`] || 0}
                                     handleChange={this.handleAnswer}
                                     handleTextChange={this.handleInput}
                                     saveDraftAnswer={this.saveInput}
