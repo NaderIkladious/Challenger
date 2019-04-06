@@ -14,7 +14,6 @@ class QuestionController extends Controller
       'description'   => 'required',
       'type'          => 'required',
       'answer'        => 'required',
-      'options'       => 'required',
       'quiz_id'       => 'required',
       'score'         => 'required'
     ]);
