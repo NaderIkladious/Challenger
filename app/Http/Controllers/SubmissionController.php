@@ -7,25 +7,6 @@ use Illuminate\Http\Request;
 
 class SubmissionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -56,7 +37,13 @@ class SubmissionController extends Controller
      */
     public function show($id)
     {
-        return Submission::with(['quiz', 'quiz.questions'])->find($id);
+        $submission = Submission::with(['quiz', 'quiz.questions'])->find($id);
+
+        if ($submission) {
+            return $submission;
+        } else {
+            return response()->json('Submission not found!', 404);
+        }
     }
 
 

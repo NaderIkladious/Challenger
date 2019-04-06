@@ -1,7 +1,7 @@
 import React from 'react';
 
 const QuizSubmitted = () => (
-  <div className="container quiz-submitted mx-5 d-flex align-items-center justify-content-center">
+  <div className="container quiz-submitted vh100 mx-5 d-flex align-items-center justify-content-center">
     <div className="p-5 bg-white rounded text-center mx-5">
       <h3 className="mt-5">This case was submitted</h3>
 
