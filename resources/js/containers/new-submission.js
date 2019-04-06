@@ -54,6 +54,11 @@ class NewSubmission extends React.Component {
     }
   };
 
+  /**
+   * Capture user input and save it the state
+   * @param Event e The change event
+   * @returns Void
+   */
   handleChange = e => {
     const { name, value } = e.target;
     this.setState({

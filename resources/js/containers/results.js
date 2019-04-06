@@ -28,6 +28,7 @@ class Results extends React.Component {
       }
     );
   }
+
   render() {
     const { score } = this.state;
     return (

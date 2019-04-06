@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
+
 const QuizNavigation = ({ submissionId, questions }) => (
   <div className="quiz-navigation position-fixed bg-dark">
     <ul className="list-inline">
