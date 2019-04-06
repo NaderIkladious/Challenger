@@ -18,7 +18,9 @@ const McqOptions = ({ options, question, answer, result, handleChange }) => (
           {option}
           <span className="ml-4">
             {answer && answer === option ? (
-              result > 0 ? (
+              typeof result === 'undefined' ? (
+                <span className="badge badge-warning p-2">Loading</span>
+              ) : result > 0 ? (
                 <span className="badge badge-success p-2">Right Answer</span>
               ) : (
                 <span className="badge badge-danger p-2">Wrong Answer!</span>

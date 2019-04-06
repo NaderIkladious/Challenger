@@ -96,7 +96,7 @@ class Quiz extends React.Component {
                                     question={question}
                                     answer={this.state.answers[question.id] || ''}
                                     answerDraft={this.state.answers[`text-${question.id}`] || ''}
-                                    result={this.state.answers[`result-${question.id}`] || 0}
+                                    result={this.state.answers[`result-${question.id}`]}
                                     handleChange={this.handleAnswer}
                                     handleTextChange={this.handleInput}
                                     saveDraftAnswer={this.saveInput}
