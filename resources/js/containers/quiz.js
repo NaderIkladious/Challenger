@@ -70,13 +70,20 @@ class Quiz extends React.Component {
         });
     };
     render() {
-        const { quiz } = this.state;
+        const { quiz, answers } = this.state;
         return (
             <div className="quiz">
                 <Route
                     path={`/quiz/${quiz.id}`}
                     exact
-                    render={() => <QuestionsList quizId={quiz.id} quizTitle={quiz.title} questions={quiz.questions} />}
+                    render={() => (
+                        <QuestionsList
+                            quizId={quiz.id}
+                            quizTitle={quiz.title}
+                            questions={quiz.questions}
+                            answers={answers}
+                        />
+                    )}
                 />
                 <Route path={`/quiz/${quiz.id}/questions`} exact render={() => <Redirect to={`/quiz/${quiz.id}`} />} />
                 {quiz.questions &&

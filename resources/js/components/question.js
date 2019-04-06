@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { McqOptions } from './';
+import { McqOptions, EssayQuestion } from './';
 
 class Question extends React.Component {
   render() {
@@ -24,28 +24,13 @@ class Question extends React.Component {
         )}
 
         {question.type === 'text' && question.options && (
-          <div>
-            <div className="form-group">
-              <textarea
-                className="form-control"
-                name={question.id}
-                answer={answer}
-                rows="3"
-                placeholder="Your Answer"
-                onChange={handleTextChange}
-                value={answer || answerDraft || ''}
-                disabled={answer.length}
-              />
-            </div>
-            <button
-              type="submit"
-              className="btn btn-primary mb-2"
-              onClick={() => saveDraftAnswer(`text-${question.id}`)}
-              disabled={!answerDraft || answer}
-            >
-              Submit
-            </button>
-          </div>
+          <EssayQuestion
+            question={question}
+            answer={answer}
+            handleTextChange={handleTextChange}
+            answerDraft={answerDraft}
+            saveDraftAnswer={saveDraftAnswer}
+          />
         )}
       </div>
     );
