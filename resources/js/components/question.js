@@ -5,7 +5,7 @@ import { McqOptions, EssayQuestion, QuestionPagination, QuizNavigation } from '.
 class Question extends React.Component {
   render() {
     const {
-      quizId,
+      submissionId,
       question,
       questions,
       answer,
@@ -14,12 +14,13 @@ class Question extends React.Component {
       handleChange,
       handleTextChange,
       saveDraftAnswer,
-      nextQuestion
+      nextQuestion,
+      submitQuiz
     } = this.props;
     let nextQuestionId = nextQuestion();
     return (
       <div className="question">
-        <QuizNavigation quizId={quizId} questions={questions} />
+        <QuizNavigation submissionId={submissionId} questions={questions} />
         <div className="container pt-5">
           <h2>{question.question}</h2>
           <p>{question.description}</p>
@@ -46,7 +47,9 @@ class Question extends React.Component {
             />
           )}
 
-          {answer && <QuestionPagination quizId={quizId} nextQuestionId={nextQuestionId} />}
+          {answer && (
+            <QuestionPagination submissionId={submissionId} nextQuestionId={nextQuestionId} submitQuiz={submitQuiz} />
+          )}
         </div>
       </div>
     );

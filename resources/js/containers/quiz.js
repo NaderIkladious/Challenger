@@ -2,17 +2,30 @@ import React from 'react';
 import Axios from 'axios';
 import { Route, Redirect } from 'react-router-dom';
 
-import { Question, QuestionsList } from '../components';
+import { Question, QuestionsList, QuizSubmitted } from '../components';
 
 class Quiz extends React.Component {
     state = {
         quiz: {},
-        answers: {}
+        answers: {},
+        submission: {}
     };
+
     componentDidMount() {
-        const quizId = this.props.match.params.id;
-        Axios.get(`/api/quizzes/${quizId}`).then(({ data }) => {
-            this.setState({ quiz: data });
+        const submissionId = this.props.match.params.id;
+        Axios.get(`/api/submissions/${submissionId}`).then(({ data }) => {
+            console.log(JSON.parse(data.submitted));
+            this.setState({
+                quiz: data.quiz,
+                answers: data.answers ? JSON.parse(data.answers) : {},
+                submission: {
+                    id: data.id,
+                    email: data.email,
+                    submitted: Boolean(JSON.parse(data.submitted)),
+                    created_at: data.created_at,
+                    score: data.score
+                }
+            });
         });
     }
 
@@ -21,14 +34,21 @@ class Quiz extends React.Component {
      * @param String questionId The id of the question to check
      * @param String answer The question answer
      */
-    checkAnswer = (id, answer) => {
+    checkAnswer = (id, answer, cb = false) => {
         Axios.post(`/api/questions/validate`, { id, answer }).then(({ data }) => {
-            this.setState({
-                answers: {
-                    ...this.state.answers,
-                    [`result-${id}`]: parseFloat(data)
+            this.setState(
+                {
+                    answers: {
+                        ...this.state.answers,
+                        [`result-${id}`]: parseFloat(data)
+                    }
+                },
+                () => {
+                    if (cb) {
+                        cb();
+                    }
                 }
-            });
+            );
         });
     };
     /**
@@ -38,18 +58,19 @@ class Quiz extends React.Component {
      */
     handleAnswer = e => {
         const { name, value } = e.target;
-        this.checkAnswer(name, value);
-        this.setState(
-            {
-                answers: {
-                    ...this.state.answers,
-                    [name]: value
+        this.checkAnswer(name, value, () => {
+            this.setState(
+                {
+                    answers: {
+                        ...this.state.answers,
+                        [name]: value
+                    }
+                },
+                () => {
+                    this.updateAnswers();
                 }
-            },
-            () => {
-                console.log(this.nextQuestion());
-            }
-        );
+            );
+        });
     };
 
     /**
@@ -59,16 +80,37 @@ class Quiz extends React.Component {
      */
     handleInput = e => {
         const { name, value } = e.target;
-        this.setState({
-            answers: {
-                ...this.state.answers,
-                [`text-${name}`]: value
+        this.setState(
+            {
+                answers: {
+                    ...this.state.answers,
+                    [`text-${name}`]: value
+                }
+            },
+            () => {
+                this.updateAnswers();
             }
+        );
+    };
+
+    /**
+     * Update the answer submission
+     * @returns Void
+     */
+    updateAnswers = () => {
+        Axios.put(`/api/submissions/${this.state.submission.id}`, {
+            answers: this.state.answers
+        }).then(({ data }) => {
+            console.log(data);
         });
     };
 
+    /**
+     * Return the next question ID
+     * @returns Int The next question ID or 0 if last
+     */
     nextQuestion = () => {
-        let nextId = false;
+        let nextId = 0;
         const { quiz, answers } = this.state;
 
         quiz.questions.some(question => {
@@ -79,52 +121,98 @@ class Quiz extends React.Component {
         });
         return nextId;
     };
+
+    /**
+     * Save draft esssay questions
+     * @param String input The question id to save
+     * @returns Void
+     */
     saveInput = input => {
-        this.setState({
-            answers: {
-                ...this.state.answers,
-                [input.replace('text-', '')]: this.state.answers[input]
-            }
+        let name = input.replace('text-', '');
+        let value = this.state.answers[input];
+
+        this.checkAnswer(name, value, () => {
+            this.setState(
+                {
+                    answers: {
+                        ...this.state.answers,
+                        [name]: value
+                    }
+                },
+                () => {
+                    this.updateAnswers();
+                }
+            );
         });
     };
+
+    submitQuiz = () => {
+        Axios.put(`/api/submissions/${this.state.submission.id}`, {
+            submitted: true
+        }).then(({ data }) => {
+            this.setState({
+                submission: {
+                    ...this.state.submission,
+                    submitted: true
+                }
+            });
+        });
+    };
+
     render() {
-        const { quiz, answers } = this.state;
+        const { quiz, answers, submission } = this.state;
+        console.log(submission.submitted);
         return (
             <div className="quiz">
-                <Route
-                    path={`/quiz/${quiz.id}`}
-                    exact
-                    render={() => (
-                        <QuestionsList
-                            quizId={quiz.id}
-                            quizTitle={quiz.title}
-                            questions={quiz.questions}
-                            answers={answers}
-                        />
-                    )}
-                />
-                <Route path={`/quiz/${quiz.id}/questions`} exact render={() => <Redirect to={`/quiz/${quiz.id}`} />} />
-                {quiz.questions &&
-                    quiz.questions.map(question => (
+                {submission && submission.submitted ? (
+                    <QuizSubmitted />
+                ) : (
+                    <div>
                         <Route
-                            key={question.id}
-                            path={`/quiz/${quiz.id}/questions/${question.id}`}
+                            path={`/submission/${submission.id}`}
+                            exact
                             render={() => (
-                                <Question
+                                <QuestionsList
+                                    submissionId={submission.id}
                                     quizId={quiz.id}
-                                    question={question}
+                                    quizTitle={quiz.title}
                                     questions={quiz.questions}
-                                    answer={this.state.answers[question.id] || ''}
-                                    answerDraft={this.state.answers[`text-${question.id}`] || ''}
-                                    result={this.state.answers[`result-${question.id}`]}
-                                    handleChange={this.handleAnswer}
-                                    handleTextChange={this.handleInput}
-                                    saveDraftAnswer={this.saveInput}
-                                    nextQuestion={this.nextQuestion}
+                                    answers={answers}
+                                    submitQuiz={this.submitQuiz}
+                                    nextQuestion={this.nextQuestion()}
                                 />
                             )}
                         />
-                    ))}
+                        <Route
+                            path={`/submission/${submission.id}/questions`}
+                            exact
+                            render={() => <Redirect to={`/submission/${quiz.id}`} />}
+                        />
+                        {quiz.questions &&
+                            quiz.questions.map(question => (
+                                <Route
+                                    key={question.id}
+                                    path={`/submission/${submission.id}/questions/${question.id}`}
+                                    render={() => (
+                                        <Question
+                                            quizId={quiz.id}
+                                            submissionId={submission.id}
+                                            question={question}
+                                            questions={quiz.questions}
+                                            answer={this.state.answers[question.id] || ''}
+                                            answerDraft={this.state.answers[`text-${question.id}`] || ''}
+                                            result={this.state.answers[`result-${question.id}`]}
+                                            handleChange={this.handleAnswer}
+                                            handleTextChange={this.handleInput}
+                                            saveDraftAnswer={this.saveInput}
+                                            nextQuestion={this.nextQuestion}
+                                            submitQuiz={this.submitQuiz}
+                                        />
+                                    )}
+                                />
+                            ))}
+                    </div>
+                )}
             </div>
         );
     }

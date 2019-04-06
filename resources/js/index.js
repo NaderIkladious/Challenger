@@ -12,7 +12,7 @@ class App extends React.Component {
         <Router>
           <Header />
           <Switch>
-            <Route path="/quiz/:id" component={Quiz} />
+            <Route path="/submission/:id" component={Quiz} />
           </Switch>
         </Router>
       </div>

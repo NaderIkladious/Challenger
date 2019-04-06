@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 
 import { QuestionTypeMap } from '../core/consts';
 
-const QuestionsList = ({ questions, quizTitle, quizId, answers }) => (
+const QuestionsList = ({ questions, quizTitle, submissionId, answers, submitQuiz, nextQuestion }) => (
   <div className="container pt-5">
     <h1>{quizTitle}</h1>
     <div className="list-group">
       {questions &&
         questions.map(question => (
           <Link
-            to={`/quiz/${quizId}/questions/${question.id}`}
+            to={`/submission/${submissionId}/questions/${question.id}`}
             className="list-group-item d-flex justify-content-between mb-4 rounded"
             key={question.id}
           >
@@ -22,6 +22,14 @@ const QuestionsList = ({ questions, quizTitle, quizId, answers }) => (
           </Link>
         ))}
     </div>
+
+    {!nextQuestion && (
+      <div className="d-flex justify-content-center">
+        <button className="btn btn-success" onClick={submitQuiz}>
+          Submit Quiz
+        </button>
+      </div>
+    )}
   </div>
 );
 

@@ -1,19 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const QuestionPagination = ({ quizId, nextQuestionId }) =>
+const QuestionPagination = ({ submissionId, nextQuestionId, submitQuiz }) =>
   nextQuestionId ? (
-    <Link to={`/quiz/${quizId}/questions/${nextQuestionId}`} className="float-right btn btn-success">
+    <Link to={`/submission/${submissionId}/questions/${nextQuestionId}`} className="float-right btn btn-success">
       Next Question
     </Link>
   ) : (
     <div className="float-right">
-      <Link to={`/quiz/${quizId}`} className="btn btn-secondary mr-2">
+      <Link to={`/submission/${submissionId}`} className="btn btn-secondary mr-2">
         Questions List
       </Link>
-      <Link to={`/quiz/${quizId}`} className="btn btn-success">
+      <button to={`/submission/${submissionId}`} className="btn btn-success" onClick={submitQuiz}>
         Submit Test
-      </Link>
+      </button>
     </div>
   );
 
