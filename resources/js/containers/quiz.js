@@ -168,6 +168,7 @@ class Quiz extends React.Component {
           submitted: true
         }
       });
+      history.push(`/results/${this.state.submission.id}`);
     });
   };
 

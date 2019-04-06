@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Submission;
+use App\Quiz;
 use Illuminate\Http\Request;
+use Symfony\Component\Console\Question\Question;
 
 class SubmissionController extends Controller
 {
@@ -65,6 +67,8 @@ class SubmissionController extends Controller
 
         $submitted = $request->input('submitted');
         if (isset($submitted)) {
+            $score = $this->calculateScore($submission);
+            $submission->score = $score;
             $submission->submitted = $submitted;
         }
 
@@ -81,5 +85,28 @@ class SubmissionController extends Controller
     public function destroy(Submission $submission)
     {
         //
+    }
+
+    /**
+     * Calculate submission total score
+     *
+     * @param Submission $submission
+     * @return Int The score of submission
+     */
+    private function calculateScore(Submission $submission)
+    {
+        $score = 0;
+        $quiz = Quiz::with('questions')->find($submission->quiz_id);
+        $answers = json_decode($submission->answers);
+        foreach ($answers as $key => $value) {
+            if (strpos($key, 'result-') > -1) {
+                $score += (float)$value;
+            }
+        }
+        $total = 0;
+        foreach ($quiz->questions as $question) {
+            $total += $question->score;
+        }
+        return round(100 * ($score / $total));
     }
 }

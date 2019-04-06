@@ -7,6 +7,22 @@ use App\Quiz;
 
 class QuizController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return Quiz::withCount('questions')->get();
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Quiz  $quiz
+     * @return \Illuminate\Http\Response
+     */
     public function show($id)
     {
         $quiz = Quiz::with('questions')->find($id);
