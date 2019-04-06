@@ -9,7 +9,7 @@ const QuestionPagination = ({ quizId, nextQuestionId }) =>
   ) : (
     <div className="float-right">
       <Link to={`/quiz/${quizId}`} className="btn btn-secondary mr-2">
-        Quetsion List
+        Questions List
       </Link>
       <Link to={`/quiz/${quizId}`} className="btn btn-success">
         Submit Test
