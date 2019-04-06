@@ -113,6 +113,7 @@ class Quiz extends React.Component {
                                 <Question
                                     quizId={quiz.id}
                                     question={question}
+                                    questions={quiz.questions}
                                     answer={this.state.answers[question.id] || ''}
                                     answerDraft={this.state.answers[`text-${question.id}`] || ''}
                                     result={this.state.answers[`result-${question.id}`]}

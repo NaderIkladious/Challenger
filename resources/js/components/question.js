@@ -1,12 +1,13 @@
 import React from 'react';
 
-import { McqOptions, EssayQuestion, QuestionPagination } from './';
+import { McqOptions, EssayQuestion, QuestionPagination, QuizNavigation } from './';
 
 class Question extends React.Component {
   render() {
     const {
       quizId,
       question,
+      questions,
       answer,
       answerDraft,
       result,
@@ -17,33 +18,36 @@ class Question extends React.Component {
     } = this.props;
     let nextQuestionId = nextQuestion();
     return (
-      <div className="container pt-5">
-        <h2>{question.question}</h2>
-        <p>{question.description}</p>
+      <div className="question">
+        <QuizNavigation quizId={quizId} questions={questions} />
+        <div className="container pt-5">
+          <h2>{question.question}</h2>
+          <p>{question.description}</p>
 
-        {question.type === 'mcq' && question.options && (
-          <div className="list-group">
-            <McqOptions
-              options={JSON.parse(question.options)}
+          {question.type === 'mcq' && question.options && (
+            <div className="list-group">
+              <McqOptions
+                options={JSON.parse(question.options)}
+                question={question}
+                answer={answer}
+                handleChange={handleChange}
+                result={result}
+              />
+            </div>
+          )}
+
+          {question.type === 'text' && question.options && (
+            <EssayQuestion
               question={question}
               answer={answer}
-              handleChange={handleChange}
-              result={result}
+              handleTextChange={handleTextChange}
+              answerDraft={answerDraft}
+              saveDraftAnswer={saveDraftAnswer}
             />
-          </div>
-        )}
+          )}
 
-        {question.type === 'text' && question.options && (
-          <EssayQuestion
-            question={question}
-            answer={answer}
-            handleTextChange={handleTextChange}
-            answerDraft={answerDraft}
-            saveDraftAnswer={saveDraftAnswer}
-          />
-        )}
-
-        {answer && <QuestionPagination quizId={quizId} nextQuestionId={nextQuestionId} />}
+          {answer && <QuestionPagination quizId={quizId} nextQuestionId={nextQuestionId} />}
+        </div>
       </div>
     );
   }
