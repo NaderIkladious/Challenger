@@ -25,7 +25,7 @@ class QuestionController extends Controller
       'type' => $validatedData['type'],
       'score' => $validatedData['score'],
       'answer' => json_encode($validatedData['answer']),
-      'options' => json_encode($validatedData['options']),
+      'options' => $request['options'] ? json_encode($request['options']) : '',
       'quiz_id' => $validatedData['quiz_id'],
     ]);
 

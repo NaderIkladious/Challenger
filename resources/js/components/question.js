@@ -37,7 +37,7 @@ class Question extends React.Component {
             </div>
           )}
 
-          {question.type === 'text' && question.options && (
+          {question.type === 'text' && (
             <EssayQuestion
               question={question}
               answer={answer}
