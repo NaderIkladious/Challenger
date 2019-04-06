@@ -39,12 +39,17 @@ class Quiz extends React.Component {
     handleAnswer = e => {
         const { name, value } = e.target;
         this.checkAnswer(name, value);
-        this.setState({
-            answers: {
-                ...this.state.answers,
-                [name]: value
+        this.setState(
+            {
+                answers: {
+                    ...this.state.answers,
+                    [name]: value
+                }
+            },
+            () => {
+                console.log(this.nextQuestion());
             }
-        });
+        );
     };
 
     /**
@@ -60,6 +65,19 @@ class Quiz extends React.Component {
                 [`text-${name}`]: value
             }
         });
+    };
+
+    nextQuestion = () => {
+        let nextId = false;
+        const { quiz, answers } = this.state;
+
+        quiz.questions.some(question => {
+            if (!answers[question.id]) {
+                nextId = question.id;
+                return true;
+            }
+        });
+        return nextId;
     };
     saveInput = input => {
         this.setState({
@@ -93,6 +111,7 @@ class Quiz extends React.Component {
                             path={`/quiz/${quiz.id}/questions/${question.id}`}
                             render={() => (
                                 <Question
+                                    quizId={quiz.id}
                                     question={question}
                                     answer={this.state.answers[question.id] || ''}
                                     answerDraft={this.state.answers[`text-${question.id}`] || ''}
@@ -100,6 +119,7 @@ class Quiz extends React.Component {
                                     handleChange={this.handleAnswer}
                                     handleTextChange={this.handleInput}
                                     saveDraftAnswer={this.saveInput}
+                                    nextQuestion={this.nextQuestion}
                                 />
                             )}
                         />

@@ -1,11 +1,21 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-import { McqOptions, EssayQuestion } from './';
+import { McqOptions, EssayQuestion, QuestionPagination } from './';
 
 class Question extends React.Component {
   render() {
-    const { question, answer, answerDraft, result, handleChange, handleTextChange, saveDraftAnswer } = this.props;
+    const {
+      quizId,
+      question,
+      answer,
+      answerDraft,
+      result,
+      handleChange,
+      handleTextChange,
+      saveDraftAnswer,
+      nextQuestion
+    } = this.props;
+    let nextQuestionId = nextQuestion();
     return (
       <div className="container pt-5">
         <h2>{question.question}</h2>
@@ -32,6 +42,8 @@ class Question extends React.Component {
             saveDraftAnswer={saveDraftAnswer}
           />
         )}
+
+        {answer && <QuestionPagination quizId={quizId} nextQuestionId={nextQuestionId} />}
       </div>
     );
   }
