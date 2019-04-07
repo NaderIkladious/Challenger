@@ -18,7 +18,7 @@ class CreateQuestionsTable extends Migration
             $table->string('question');
             $table->longText('description');
             $table->enum('type', ['text', 'mcq']);
-            $table->json('answer');
+            $table->json('answer')->nullable();
             $table->float('score');
             $table->unsignedInteger('quiz_id');
             $table->timestamps();
