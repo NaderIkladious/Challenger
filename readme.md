@@ -1,13 +1,17 @@
+# Challenger
+
+Application that uses Laravel and React to make a hackerrank like platform.
+
+#### [Live Demo](https://innoscripta-challenger.herokuapp.com)
+
 ## Installation
 
 After cloning project run the following
 
 - `composer install`
 - `npm install`
-- Then go the `.env` in the root directory and change `DB_DATABASE` Path to the new absolute path
 - in the project directory run the following:
 - `php artisan serve`
-- `npm run hot`
 
 ## API Documentation
 
@@ -24,6 +28,17 @@ After cloning project run the following
       "type": "text",
       "score": 3.0,
       "answer": ["Washington"]
+    }
+    ```
+
+- `/quizzes` - `POST`
+  Creates new quiz
+
+  - Body:
+    ```
+    {
+      "title": "Frontend developers placement test",
+      "description": "Test for frontend developers",
     }
     ```
 
@@ -105,3 +120,12 @@ After cloning project run the following
     ```
     2.0
     ```
+- `/submissions/{id}` - `PUT`
+  Update submission with answer and submitted flag
+  - Body:
+  ```
+  {
+    "submitted": 1,
+    "answers": {...}
+  }
+  ```
