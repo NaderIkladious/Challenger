@@ -32,8 +32,8 @@ class Results extends React.Component {
   render() {
     const { score } = this.state;
     return (
-      <div className="container vh100 mx-5 d-flex align-items-center justify-content-center">
-        <div className="p-5 bg-white border rounded text-center mx-5 w-50">
+      <div className="container vh100 mx-md-5 d-flex align-items-center justify-content-center">
+        <div className="p-2 p-md-5 bg-white border rounded text-center mx-md-5 w50">
           <h1 className="mt-5">Congratulations!</h1>
           <h2 className="text-success">{score}%</h2>
           <p>

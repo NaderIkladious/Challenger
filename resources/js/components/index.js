@@ -6,3 +6,4 @@ export { default as EssayQuestion } from './essay-question';
 export { default as QuestionPagination } from './question-pagination';
 export { default as QuizNavigation } from './quiz-navigation';
 export { default as QuizSubmitted } from './quiz-submitted';
+export { Spinner } from './spinner';

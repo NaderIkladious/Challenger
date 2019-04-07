@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { McqOptions, EssayQuestion, QuestionPagination, QuizNavigation } from './';
 
@@ -18,6 +19,10 @@ const Question = ({
   <div className="question">
     <QuizNavigation submissionId={submissionId} questions={questions} />
     <div className="container pt-5">
+      <Link to={`/submission/${submissionId}`} className="btn btn-secondary d-md-none mb-3">
+        {' '}
+        &lt; Questions List
+      </Link>
       <h2>{question.question}</h2>
       <p>{question.description}</p>
 

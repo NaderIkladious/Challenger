@@ -1,6 +1,7 @@
 import React from 'react';
 import Axios from 'axios';
 import { Link } from 'react-router-dom';
+import { Spinner } from '../components';
 
 class Quizzes extends React.Component {
   state = {
@@ -21,7 +22,7 @@ class Quizzes extends React.Component {
       <div className="container mt-5">
         <h2>Latest case studies</h2>
         <div className="list-group">
-          {quizzes &&
+          {quizzes && quizzes.length ? (
             quizzes.map(quiz => (
               <Link
                 to={`/quiz/${quiz.id}`}
@@ -33,7 +34,10 @@ class Quizzes extends React.Component {
                   <p className="mb-0 text-secondary">{quiz.questions_count} question(s)</p>
                 </div>
               </Link>
-            ))}
+            ))
+          ) : (
+            <Spinner />
+          )}
         </div>
       </div>
     );

@@ -2,6 +2,7 @@ import React from 'react';
 import Axios from 'axios';
 
 import history from '../history';
+import { Spinner } from '../components';
 
 class NewSubmission extends React.Component {
   state = {
@@ -69,26 +70,30 @@ class NewSubmission extends React.Component {
   render() {
     const { quiz } = this.state;
     return (
-      <div className="container vh100 mx-5 d-flex align-items-center justify-content-center">
-        <div className="p-5 bg-white border rounded text-center mx-5 w-50">
-          <h3 className="mt-5">{quiz.title}</h3>
-          <p className="">{quiz.description}</p>
+      <div className="container vh100 mx-md-5 d-flex align-items-center justify-content-center">
+        {Object.keys(quiz).length ? (
+          <div className="p-2 p-md-5 bg-white border rounded text-center mx-md-5 w50">
+            <h3 className="mt-3 mt-md-5">{quiz.title}</h3>
+            <p className="">{quiz.description}</p>
 
-          <div className="form-group">
-            <input
-              type="email"
-              name="email"
-              className="form-control"
-              value={this.state.email}
-              onChange={this.handleChange}
-              placeholder="Email"
-            />
+            <div className="form-group">
+              <input
+                type="email"
+                name="email"
+                className="form-control"
+                value={this.state.email}
+                onChange={this.handleChange}
+                placeholder="Email"
+              />
+            </div>
+
+            <button className="btn btn-success" onClick={this.startQuiz} disabled={!this.isValidEmail()}>
+              Start Challenge
+            </button>
           </div>
-
-          <button className="btn btn-success" onClick={this.startQuiz} disabled={!this.isValidEmail()}>
-            Start Challenge
-          </button>
-        </div>
+        ) : (
+          <Spinner />
+        )}
       </div>
     );
   }
