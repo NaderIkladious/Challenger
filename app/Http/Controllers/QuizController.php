@@ -18,6 +18,26 @@ class QuizController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'title'      => 'required',
+            'description'   => 'required',
+        ]);
+
+        $quiz = Quiz::create([
+            'title' => $validatedData['title'],
+            'description' => $validatedData['description'],
+        ]);
+
+        return response()->json($quiz, 200);
+    }
+    /**
      * Display the specified resource.
      *
      * @param  \App\Quiz  $quiz

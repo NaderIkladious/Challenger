@@ -2,6 +2,7 @@
 
 Route::get('quizzes/{id}', 'QuizController@show');
 Route::get('quizzes', 'QuizController@index');
+Route::post('quizzes', 'QuizController@store');
 
 Route::post('questions', 'QuestionController@store');
 Route::post('questions/validate', 'QuestionController@check');
