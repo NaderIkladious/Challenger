@@ -14,7 +14,7 @@ class AddQuestionOptions extends Migration
     public function up()
     {
         Schema::table('questions', function (Blueprint $table) {
-            $table->json('options')->nullable()->default('');
+            $table->json('options')->nullable();
         });
     }
 
